@@ -24,11 +24,14 @@ Natural-language question → relevant tables → candidate `SELECT` (local or c
 ### 🧠 Verified-query memory (accuracy that compounds)
 Confirmed `question → SQL` pairs become **deterministic, auditable memory** and are retrieved as few-shot examples for similar future questions — so the system learns your schema, joins, and business definitions over time. The Vanna-style "RAG as memory" loop, with a Vitrus twist: **only guard-passed, verified queries become memory.**
 
+### 🤖 Governed MCP — let agents query your data without bypassing the guard
+A Model Context Protocol server exposes the SQL brain to **Claude Desktop, Cursor, Codex, OpenClaw / Hermes** and your own agents — `sql_ask`, `sql_run`, `list_tables`, `verify_claim`, `data_quality_gaps`, `teach_query`. The guard, row-level security, column masking, and audit trail are enforced **inside every tool**, so an agent cannot hallucinate a table, write data, or read a protected column. `stdio` + Streamable HTTP. Most text-to-SQL tools ship no governed MCP at all — here it's a first-class, governed surface.
+
 ### 🔍 Structured glass-box
 Deterministic, LLM-free data-quality gaps (**orphan foreign keys, stale rows, empty tables, missing primary keys** — each with its probe SQL), claim verification (**grounded / unsupported / cannot-verify** with evidence), full provenance, and a **KVKK/GDPR audit trail** with PII masking.
 
-### 🖥️ White-label operator console
-A single-tenant, brandable dashboard: ask → see SQL → edit & run → results + chart · "is this SQL correct?" write-back · gap / verify / provenance panels · training-data management · setup wizard. Runs as one process — no external dependencies, air-gapped friendly.
+### 🖥️ Modern white-label operator console
+A single-tenant, brandable **dark dashboard**: ask in plain language → see the SQL → edit & run → results **+ auto chart** (deterministic, rendered client-side — **zero code execution**) · suggested starter & follow-up questions · "is this SQL correct?" write-back · gap / verify / provenance panels · training-data management with one-click **schema seeding** · setup wizard. Runs as one process — no external dependencies, air-gapped friendly.
 
 ### 🔒 Fully local & air-gapped
 Local LLM (**Ollama / Gemma**) + local embedder (**BGE-M3 / Qwen3**, strong Turkish & multilingual) — **data never leaves the building.** No cloud keys required.
@@ -36,8 +39,11 @@ Local LLM (**Ollama / Gemma**) + local embedder (**BGE-M3 / Qwen3**, strong Turk
 ### 📦 One-command on-prem
 `docker compose up` (Postgres + pgvector, Ollama, console) — or an **air-gapped USB bundle**: carry it in, load it, it runs. Backup/restore included.
 
+### 🔌 Connects to the systems you already run — including ERP
+MySQL & Postgres today; **SQL Server, Oracle, and SAP HANA** drivers for **SAP** (S/4HANA via HANA SQL / CDS views; ECC via a read-only replica) and **Canias** — the ERP systems factories actually run. Plus token-REST connectors for SaaS & developer tools (**GitHub, GitLab, Jira, Notion, Zendesk, Airtable, Stripe, HubSpot, Salesforce…**) that flow into the same brain. Recommended path for ERP: a **read-only replica**, so production is never touched and the same guard / masking / audit applies.
+
 ### ✅ Read-only by construction
-Connects to your **existing** MySQL/Postgres without ever writing to it — four layers: a SELECT-only DB user, a read-only transaction, a statement timeout, and the AST guard.
+Connects to your **existing** databases without ever writing to them — four layers: a SELECT-only DB user, a read-only transaction, a statement timeout, and the AST guard.
 
 ---
 
@@ -57,4 +63,4 @@ Interested in a pilot or evaluation? Open an issue or discussion on the **[core 
 
 ### Özet (Türkçe)
 
-**Vitrus Enterprise**, açık-çekirdek Vitrus'u **ilişkisel veritabanlarına** (MySQL/Postgres) ve **air-gapped on-prem** kurulumlara taşır. Doğal dilde sorun → aday SQL → **deterministik guard** (yalnız tek-ifade `SELECT`, şemada olmayan tablo/kolon yok, PII/politika, zorunlu LIMIT) → salt-okunur çalıştırma → cevap + kaynak. Guard güvenle çeviremezse **uydurmaz, "bilmiyorum" der.** Doğrulanmış sorgular kalıcı, denetlenebilir hafıza olur (doğruluk birikir). Yapılandırılmış glass-box (orphan FK / bayat satır / boş tablo boşlukları + KVKK denetim izi, PII maskeli). White-label operatör konsolu. Tamamen yerel: Ollama/Gemma + BGE-M3/Qwen3 — **veri sunucudan çıkmaz.** Tek-komut on-prem + USB ile air-gapped paket. Belediye, fabrika ve regüle/egemen-veri kurumları için.
+**Vitrus Enterprise**, açık-çekirdek Vitrus'u **ilişkisel veritabanlarına** (MySQL/Postgres) ve **air-gapped on-prem** kurulumlara taşır. Doğal dilde sorun → aday SQL → **deterministik guard** (yalnız tek-ifade `SELECT`, şemada olmayan tablo/kolon yok, PII/politika, zorunlu LIMIT) → salt-okunur çalıştırma → cevap + kaynak. Guard güvenle çeviremezse **uydurmaz, "bilmiyorum" der.** Doğrulanmış sorgular kalıcı, denetlenebilir hafıza olur (doğruluk birikir). Yapılandırılmış glass-box (orphan FK / bayat satır / boş tablo boşlukları + KVKK denetim izi, PII maskeli). **Yönetişimli MCP**: AI agent'ları (Claude/Cursor/Codex/OpenClaw) guard + RLS + maskeleme tool içinde zorunlu olarak veriyi sorgular. Modern white-label konsol (otomatik grafik — kod çalıştırmaz, başlangıç/devam soruları). **SAP & Canias dahil ERP bağlantıları** (SQL Server / Oracle / SAP HANA sürücüleri; önerilen yol salt-okunur replika). Tamamen yerel: Ollama/Gemma + BGE-M3/Qwen3 — **veri sunucudan çıkmaz.** Tek-komut on-prem + USB ile air-gapped paket. Belediye, fabrika ve regüle/egemen-veri kurumları için.
